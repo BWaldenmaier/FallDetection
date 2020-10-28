@@ -21,6 +21,7 @@ public class SignUp extends AppCompatActivity {
     Button buttonSignUp;
     TextView textViewLogin;
     ProgressBar progressBar;
+    //blub
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
