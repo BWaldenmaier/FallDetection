@@ -10,4 +10,5 @@
     <string name="loginhere2">Already have an account? <u>Login</u> </string>
     <string name="register">Not registered yet? Sign up <u>here</u></string>
     <string name="welcome">Welcome to Fall Detection!</string>
+    <string name="History">Fall History</string>
 </resources>

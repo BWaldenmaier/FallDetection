@@ -119,6 +119,9 @@ public class Login extends AppCompatActivity {
                                                 else{
                                                     progressBar.setVisibility(View.GONE);
                                                     Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_SHORT).show();
+                                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                                    startActivity(intent);
+                                                    finish();
                                                 }
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
@@ -128,6 +131,9 @@ public class Login extends AppCompatActivity {
                                         @Override
                                         public void onErrorResponse(VolleyError error) {
                                             Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
+                                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                            startActivity(intent);
+                                            finish();
                                             // TODO: Handle error
                                         }
                                     });
