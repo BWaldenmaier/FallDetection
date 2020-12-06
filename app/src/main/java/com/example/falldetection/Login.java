@@ -12,8 +12,35 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.pusher.pushnotifications.PushNotifications;
+
 import com.google.android.material.textfield.TextInputEditText;
 import com.vishnusivadas.advanced_httpurlconnection.PutData;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.net.ssl.HttpsURLConnection;
+
 
 public class Login extends AppCompatActivity {
 
@@ -22,10 +49,20 @@ public class Login extends AppCompatActivity {
     TextView textViewSignUp;
     ProgressBar progressBar;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+
+        final RequestQueue queue = Volley.newRequestQueue(this);
+
+
+        PushNotifications.start(getApplicationContext(), "b147d8cf-58f4-4190-97bb-65410f817f68");
+        PushNotifications.addDeviceInterest("hello");
+
+
 
         textInputEditTextUsername = findViewById(R.id.username);
         textInputEditTextPassword = findViewById(R.id.password);
@@ -45,6 +82,7 @@ public class Login extends AppCompatActivity {
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //final String url = "http://lxvongobsthndl.ddns.net:3000/user/login";
                 final String username, password;
                 username = String.valueOf(textInputEditTextUsername.getText());
                 password = String.valueOf(textInputEditTextPassword.getText());
@@ -55,29 +93,65 @@ public class Login extends AppCompatActivity {
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            String[] field = new String[2];
-                            field[0] = "username";
-                            field[1] = "password";
-                            //Creating array for data
-                            String[] data = new String[2];
-                            data[0] = username;
-                            data[1] = password;
-                            PutData putData = new PutData("http://192.168.178.33/LoginRegister/login.php", "POST", field, data);
+
+                            String url ="http://lxvongobsthndl.ddns.net:3000/user/login";
+
+                            // POST parameters
+                            Map<String, String> params = new HashMap<String, String>();
+                            params.put("username", username);
+                            params.put("password", password);
+
+                            JSONObject jsonObj = new JSONObject(params);
+
+                            final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                                    (Request.Method.POST, url, jsonObj, new Response.Listener<JSONObject>() {
+                                        @Override
+                                        public void onResponse(JSONObject response) {
+                                            try {
+                                                Object success = response.get("success");
+                                                Toast.makeText(getApplicationContext(), success.toString(), Toast.LENGTH_SHORT).show();
+                                                if (success.toString().equals("true")){
+                                                    progressBar.setVisibility(View.GONE);
+                                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                                    startActivity(intent);
+                                                    finish();
+                                                }
+                                                else{
+                                                    progressBar.setVisibility(View.GONE);
+                                                    Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_SHORT).show();
+                                                }
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    }, new Response.ErrorListener() {
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
+                                            Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
+                                            // TODO: Handle error
+                                        }
+                                    });
+
+                            MySingleton.getInstance(Login.this).addToRequestque(jsonObjectRequest);
+
+
+
+                            /*PutData putData = new PutData("http://192.168.178.33/LoginRegister/login.php", "POST", field, data);
                             if (putData.startPut()) {
                                 if (putData.onComplete()) {
                                     progressBar.setVisibility(View.GONE);
                                     String result = putData.getResult();
                                     if (result.equals("Login Success")){
-                                        Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
+                                        //Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                         startActivity(intent);
                                         finish();
                                     }
                                     else{
-                                        Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
+                                        //Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
                                     }
                                 }
-                            }
+                            }*/
                         }
                     });
                 }

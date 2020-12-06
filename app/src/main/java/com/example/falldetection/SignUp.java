@@ -12,8 +12,18 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.material.textfield.TextInputEditText;
 import com.vishnusivadas.advanced_httpurlconnection.PutData;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SignUp extends AppCompatActivity {
 
@@ -55,28 +65,60 @@ public class SignUp extends AppCompatActivity {
                 password = String.valueOf(textInputEditTextPassword.getText());
                 email = String.valueOf(textInputEditTextEmail.getText());
 
-                if (!fullname.equals("") && !username.equals("") && !password.equals("") && !email.equals("")) {
+                progressBar.setVisibility(View.VISIBLE);
 
-                    progressBar.setVisibility(View.VISIBLE);
+                if (!fullname.equals("") && !username.equals("") && !password.equals("") && !email.equals("")) {
                     //Start ProgressBar first (Set visibility VISIBLE)
                     Handler handler = new Handler(Looper.getMainLooper());
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            //Starting Write and Read data with URL
-                            //Creating array for parameters
-                            String[] field = new String[4];
-                            field[0] = "fullname";
-                            field[1] = "username";
-                            field[2] = "password";
-                            field[3] = "email";
-                            //Creating array for data
-                            String[] data = new String[4];
-                            data[0] = fullname;
-                            data[1] = username;
-                            data[2] = password;
-                            data[3] = email;
-                            PutData putData = new PutData("http://192.168.178.33/LoginRegister/signup.php", "POST", field, data);
+                            String url ="http://lxvongobsthndl.ddns.net:3000/user/registration";
+
+                            // POST parameters
+                            Map<String, String> params = new HashMap<String, String>();
+                            params.put("fullname", fullname);
+                            params.put("username", username);
+                            params.put("password", password);
+                            params.put("email", email);
+
+
+                            JSONObject jsonObj = new JSONObject(params);
+
+                            final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                                    (Request.Method.POST, url, jsonObj, new Response.Listener<JSONObject>() {
+                                        @Override
+                                        public void onResponse(JSONObject response) {
+                                            try {
+                                                Object success = response.get("success");
+                                                Toast.makeText(getApplicationContext(), success.toString(), Toast.LENGTH_SHORT).show();
+                                                if (success.toString().equals("true")){
+                                                    progressBar.setVisibility(View.GONE);
+                                                    Intent intent = new Intent(getApplicationContext(), Login.class);
+                                                    startActivity(intent);
+                                                    finish();
+                                                }
+                                                else{
+                                                    progressBar.setVisibility(View.GONE);
+                                                    Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_SHORT).show();
+                                                }
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    }, new Response.ErrorListener() {
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
+                                            Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
+                                            // TODO: Handle error
+                                        }
+                                    });
+
+                            MySingleton.getInstance(SignUp.this).addToRequestque(jsonObjectRequest);
+
+
+
+                            /*PutData putData = new PutData("http://192.168.178.33/LoginRegister/signup.php", "POST", field, data);
                             if (putData.startPut()) {
                                 if (putData.onComplete()) {
                                     progressBar.setVisibility(View.GONE);
@@ -90,7 +132,7 @@ public class SignUp extends AppCompatActivity {
                                         Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
                                     }
                                 }
-                            }
+                            }*/
                         }
                     });
                 } else {
