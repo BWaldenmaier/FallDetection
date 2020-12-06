@@ -100,7 +100,7 @@ public class SignUp extends AppCompatActivity {
                                                 }
                                                 else{
                                                     progressBar.setVisibility(View.GONE);
-                                                    Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(getApplicationContext(), "Registration failed", Toast.LENGTH_SHORT).show();
                                                 }
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
