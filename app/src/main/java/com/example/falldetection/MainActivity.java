@@ -50,9 +50,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadFalls(){
-        String url ="http://lxvongobsthndl.ddns.net:3000/update";
+        String url ="http://lxvongobsthndl.ddns.net:3000/updateFalls";
 
-        String loggedInUser = getIntent().getStringExtra("username");
+        loggedInUser = getIntent().getStringExtra("username");
 
         // POST parameters
         Map<String, String> params = new HashMap<String, String>();
