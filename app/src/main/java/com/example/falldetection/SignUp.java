@@ -98,6 +98,10 @@ public class SignUp extends AppCompatActivity {
                                                     startActivity(intent);
                                                     finish();
                                                 }
+                                                else if (success.toString().equals("doubleEntry")){
+                                                    progressBar.setVisibility(View.GONE);
+                                                    Toast.makeText(getApplicationContext(), "This user is already registered", Toast.LENGTH_SHORT).show();
+                                                }
                                                 else{
                                                     progressBar.setVisibility(View.GONE);
                                                     Toast.makeText(getApplicationContext(), "Registration failed", Toast.LENGTH_SHORT).show();
