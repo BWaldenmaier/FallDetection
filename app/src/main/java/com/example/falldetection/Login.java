@@ -49,12 +49,6 @@ public class Login extends AppCompatActivity {
     TextView textViewSignUp;
     ProgressBar progressBar;
 
-    public String getLoggedInUser() {
-        return loggedInUser;
-    }
-
-    private String loggedInUser = null;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,9 +111,9 @@ public class Login extends AppCompatActivity {
                                                 Object success = response.get("success");
                                                 Toast.makeText(getApplicationContext(), success.toString(), Toast.LENGTH_SHORT).show();
                                                 if (success.toString().equals("true")){
-                                                    loggedInUser = username;
                                                     progressBar.setVisibility(View.GONE);
                                                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                                    intent.putExtra("username", username);
                                                     startActivity(intent);
                                                 }
                                                 else{

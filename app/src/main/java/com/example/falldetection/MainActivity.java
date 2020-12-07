@@ -46,14 +46,13 @@ public class MainActivity extends AppCompatActivity {
         MyAdapter adapter = new MyAdapter(this, whoFell, date, time, images);
         itemListView.setAdapter(adapter);
 
-        Login login = new Login();
-        loggedInUser = login.getLoggedInUser();
-
         loadFalls();
     }
 
     private void loadFalls(){
         String url ="http://lxvongobsthndl.ddns.net:3000/update";
+
+        String loggedInUser = getIntent().getStringExtra("username");
 
         // POST parameters
         Map<String, String> params = new HashMap<String, String>();
