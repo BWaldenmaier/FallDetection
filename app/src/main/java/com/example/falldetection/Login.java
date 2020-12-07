@@ -49,6 +49,12 @@ public class Login extends AppCompatActivity {
     TextView textViewSignUp;
     ProgressBar progressBar;
 
+    public String getLoggedInUser() {
+        return loggedInUser;
+    }
+
+    private String loggedInUser = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,18 +117,18 @@ public class Login extends AppCompatActivity {
                                                 Object success = response.get("success");
                                                 Toast.makeText(getApplicationContext(), success.toString(), Toast.LENGTH_SHORT).show();
                                                 if (success.toString().equals("true")){
+                                                    loggedInUser = username;
                                                     progressBar.setVisibility(View.GONE);
                                                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                                     startActivity(intent);
-                                                    finish();
                                                 }
                                                 else{
                                                     progressBar.setVisibility(View.GONE);
                                                     Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_SHORT).show();
                                                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                                     startActivity(intent);
-                                                    finish();
                                                 }
+                                                finish();
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
                                             }

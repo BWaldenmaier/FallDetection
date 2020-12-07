@@ -14,8 +14,19 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private String[] date = {"06.12.2020"};
     private String[] time = {"16:12:40"};
     private int[] images = {R.drawable.alert};
+    private String loggedInUser = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +45,37 @@ public class MainActivity extends AppCompatActivity {
         itemListView = findViewById(R.id.itemListView);
         MyAdapter adapter = new MyAdapter(this, whoFell, date, time, images);
         itemListView.setAdapter(adapter);
+
+        Login login = new Login();
+        loggedInUser = login.getLoggedInUser();
+
+        loadFalls();
+    }
+
+    private void loadFalls(){
+        String url ="http://lxvongobsthndl.ddns.net:3000/update";
+
+        // POST parameters
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("username", loggedInUser);
+
+        JSONObject jsonObj = new JSONObject(params);
+
+        final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.POST, url, jsonObj, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        MySingleton.getInstance(MainActivity.this).addToRequestque(jsonObjectRequest);
+
     }
 
     class MyAdapter extends ArrayAdapter<String> {
@@ -51,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
             this.rDate = date;
             this.rImgs = imgs;
         }
+
 
         @NonNull
         @Override
