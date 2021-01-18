@@ -109,8 +109,8 @@ public class Login extends AppCompatActivity {
                                         public void onResponse(JSONObject response) {
                                             try {
                                                 Object success = response.get("success");
-                                                Toast.makeText(getApplicationContext(), success.toString(), Toast.LENGTH_SHORT).show();
                                                 if (success.toString().equals("true")){
+                                                    Toast.makeText(getApplicationContext(), "Login successful", Toast.LENGTH_SHORT).show();
                                                     progressBar.setVisibility(View.GONE);
                                                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                                     intent.putExtra("username", username);
@@ -119,10 +119,7 @@ public class Login extends AppCompatActivity {
                                                 else{
                                                     progressBar.setVisibility(View.GONE);
                                                     Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_SHORT).show();
-                                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                                    startActivity(intent);
                                                 }
-                                                finish();
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
                                             }
@@ -130,34 +127,13 @@ public class Login extends AppCompatActivity {
                                     }, new Response.ErrorListener() {
                                         @Override
                                         public void onErrorResponse(VolleyError error) {
+                                            progressBar.setVisibility(View.GONE);
                                             Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
-                                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                            startActivity(intent);
-                                            finish();
                                             // TODO: Handle error
                                         }
                                     });
 
                             MySingleton.getInstance(Login.this).addToRequestque(jsonObjectRequest);
-
-
-
-                            /*PutData putData = new PutData("http://192.168.178.33/LoginRegister/login.php", "POST", field, data);
-                            if (putData.startPut()) {
-                                if (putData.onComplete()) {
-                                    progressBar.setVisibility(View.GONE);
-                                    String result = putData.getResult();
-                                    if (result.equals("Login Success")){
-                                        //Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
-                                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                        startActivity(intent);
-                                        finish();
-                                    }
-                                    else{
-                                        //Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            }*/
                         }
                     });
                 }
