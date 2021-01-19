@@ -103,12 +103,19 @@ public class MainActivity extends AppCompatActivity {
                             try {
                                 JSONObject entry = response.getJSONObject(i);
                                 Object id = entry.get("id");
-                                Object date2 = entry.get("date");
+                                String dateAndTime = (String) entry.get("date");
+                                String date = dateAndTime.substring(0,10);
+                                String yy = date.substring(0,4);
+                                String mm = date.substring(5,7);
+                                String dd = date.substring(8,10);
+                                String germanDate = dd +"."+ mm +"."+yy;
+                                String time = dateAndTime.substring(11,19);
+
                                 Object userid = entry.get("userid");
 
-                                mWhoFell.add("grandma");
-                                mDate.add((String) date2);
-                                mTime.add((String) date2);
+                                mWhoFell.add("Grandma");
+                                mDate.add(germanDate);
+                                mTime.add(time);
                                 images.add(R.mipmap.granny);
 
                                 makeAdapter();
