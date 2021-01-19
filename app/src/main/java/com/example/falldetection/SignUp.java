@@ -25,13 +25,20 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Activity to register a new User in the database
+ */
 public class SignUp extends AppCompatActivity {
 
-    TextInputEditText textInputEditTextFullname, textInputEditTextUsername, textInputEditTextPassword, textInputEditTextEmail;
-    Button buttonSignUp;
-    TextView textViewLogin;
-    ProgressBar progressBar;
+    private TextInputEditText textInputEditTextFullname, textInputEditTextUsername, textInputEditTextPassword, textInputEditTextEmail;
+    private Button buttonSignUp;
+    private TextView textViewLogin;
+    private ProgressBar progressBar;
 
+    /**
+     * create the Sign Up Instance
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +52,7 @@ public class SignUp extends AppCompatActivity {
         textViewLogin = findViewById(R.id.loginText);
         progressBar = findViewById(R.id.progress);
 
+        // click Listener to change the UI View from the Registration to the Login
         textViewLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,6 +62,7 @@ public class SignUp extends AppCompatActivity {
             }
         });
 
+        // Click Listener to Register a new User with the given data
         buttonSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

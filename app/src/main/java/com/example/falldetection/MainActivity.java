@@ -34,6 +34,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Activity to show the History of detected Falls
+ */
 public class MainActivity extends AppCompatActivity {
 
     private ListView itemListView;
@@ -44,19 +47,26 @@ public class MainActivity extends AppCompatActivity {
     private MyAdapter adapter;
     private String loggedInUser = null;
 
+    /**
+     * creates the Main Activity for the Fall History
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         try {
-            loadFalls();
+            loadFalls();  //load Falls from Database when Login was successful
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * creates the Adapter for the UI data
+     */
     private void makeAdapter(){
         itemListView = findViewById(R.id.itemListView);
         adapter = new MyAdapter(this, mWhoFell, mDate, mTime, images);
@@ -64,6 +74,9 @@ public class MainActivity extends AppCompatActivity {
         itemListView.invalidateViews();
     }
 
+    /**
+     * Load Falls from Databse whenever a User puts the App into Foreground
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -74,6 +87,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Method to load all falls from a specific User from the Database
+     * @throws JSONException
+     */
     private void loadFalls() throws JSONException {
         String url ="http://lxvongobsthndl.ddns.net:3000/updateFalls";
 
@@ -82,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
         JSONArray jsonArray = new JSONArray();
         jsonArray.put(loggedInUser);
 
+        // Response Listener for data from database for a specific username
         final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest
                 (Request.Method.POST, url, jsonArray, new Response.Listener<JSONArray>() {
                     @Override
@@ -133,11 +151,13 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
                     }
                 });
-
         MySingleton.getInstance(MainActivity.this).addToRequestque(jsonArrayRequest);
     }
 
-    class MyAdapter extends ArrayAdapter<String> {
+    /**
+     * Adapter for the Data shown in the UI
+     */
+    private class MyAdapter extends ArrayAdapter<String> {
 
         Context context;
         ArrayList<String> rWhoFell;
@@ -154,6 +174,13 @@ public class MainActivity extends AppCompatActivity {
             this.rImages = images;
         }
 
+        /**
+         * Returns the rows for the Data shown in the UI
+         * @param position
+         * @param convertView
+         * @param parent
+         * @return
+         */
         @NonNull
         @Override
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -169,7 +196,6 @@ public class MainActivity extends AppCompatActivity {
             myWhoFell.setText(rWhoFell.get(position));
             myDate.setText(rDate.get(position));
             myTime.setText(rTime.get(position));
-            //myDeleteButtons.setImageResource(rdeleteButtons.get(position));
             return row;
         }
     }

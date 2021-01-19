@@ -41,15 +41,20 @@ import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
-
+/**
+ * Login Activity to Login with an registered User
+ */
 public class Login extends AppCompatActivity {
 
-    TextInputEditText textInputEditTextUsername, textInputEditTextPassword;
-    Button buttonLogin;
-    TextView textViewSignUp;
-    ProgressBar progressBar;
+    private TextInputEditText textInputEditTextUsername, textInputEditTextPassword;
+    private Button buttonLogin;
+    private TextView textViewSignUp;
+    private ProgressBar progressBar;
 
-
+    /**
+     * on Create Method to set up up everything neccessary to Login
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +70,7 @@ public class Login extends AppCompatActivity {
         textViewSignUp = findViewById(R.id.signUpText);
         progressBar = findViewById(R.id.progress);
 
+        //click Listener to change UI from Login to the Registration Activity
         textViewSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,6 +80,7 @@ public class Login extends AppCompatActivity {
             }
         });
 
+        //click Listener to validate data from database and Login a User
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
