@@ -98,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
                         if (images != null){
                             images.clear();
                         }
+
                         for (int i = 0; i < response.length(); i++){
 
                             try {
