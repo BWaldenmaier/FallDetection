@@ -31,7 +31,6 @@ public class SignUp extends AppCompatActivity {
     Button buttonSignUp;
     TextView textViewLogin;
     ProgressBar progressBar;
-    //blub
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +67,6 @@ public class SignUp extends AppCompatActivity {
                 progressBar.setVisibility(View.VISIBLE);
 
                 if (!fullname.equals("") && !username.equals("") && !password.equals("") && !email.equals("")) {
-                    //Start ProgressBar first (Set visibility VISIBLE)
                     Handler handler = new Handler(Looper.getMainLooper());
                     handler.post(new Runnable() {
                         @Override
@@ -91,16 +89,16 @@ public class SignUp extends AppCompatActivity {
                                         public void onResponse(JSONObject response) {
                                             try {
                                                 Object success = response.get("success");
-                                                Toast.makeText(getApplicationContext(), success.toString(), Toast.LENGTH_SHORT).show();
                                                 if (success.toString().equals("true")){
                                                     progressBar.setVisibility(View.GONE);
+                                                    Toast.makeText(getApplicationContext(), "Registration was succesfull", Toast.LENGTH_SHORT).show();
                                                     Intent intent = new Intent(getApplicationContext(), Login.class);
                                                     startActivity(intent);
                                                     finish();
                                                 }
                                                 else if (success.toString().equals("doubleEntry")){
                                                     progressBar.setVisibility(View.GONE);
-                                                    Toast.makeText(getApplicationContext(), "This user is already registered", Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(getApplicationContext(), "This user is already registered! Try another Username", Toast.LENGTH_SHORT).show();
                                                 }
                                                 else{
                                                     progressBar.setVisibility(View.GONE);
@@ -114,29 +112,10 @@ public class SignUp extends AppCompatActivity {
                                         @Override
                                         public void onErrorResponse(VolleyError error) {
                                             Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
-                                            // TODO: Handle error
                                         }
                                     });
 
                             MySingleton.getInstance(SignUp.this).addToRequestque(jsonObjectRequest);
-
-
-
-                            /*PutData putData = new PutData("http://192.168.178.33/LoginRegister/signup.php", "POST", field, data);
-                            if (putData.startPut()) {
-                                if (putData.onComplete()) {
-                                    progressBar.setVisibility(View.GONE);
-                                    String result = putData.getResult();
-                                    if (result.equals("Sign Up Success")) {
-                                        Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
-                                        Intent intent = new Intent(getApplicationContext(), Login.class);
-                                        startActivity(intent);
-                                        finish();
-                                    } else {
-                                        Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            }*/
                         }
                     });
                 } else {

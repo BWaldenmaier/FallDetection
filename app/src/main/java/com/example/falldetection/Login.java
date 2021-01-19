@@ -55,13 +55,8 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-
-        final RequestQueue queue = Volley.newRequestQueue(this);
-
-
         PushNotifications.start(getApplicationContext(), "b147d8cf-58f4-4190-97bb-65410f817f68");
         PushNotifications.addDeviceInterest("hello");
-
 
 
         textInputEditTextUsername = findViewById(R.id.username);
@@ -82,7 +77,6 @@ public class Login extends AppCompatActivity {
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //final String url = "http://lxvongobsthndl.ddns.net:3000/user/login";
                 final String username, password;
                 username = String.valueOf(textInputEditTextUsername.getText());
                 password = String.valueOf(textInputEditTextPassword.getText());
@@ -129,7 +123,6 @@ public class Login extends AppCompatActivity {
                                         public void onErrorResponse(VolleyError error) {
                                             progressBar.setVisibility(View.GONE);
                                             Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
-                                            // TODO: Handle error
                                         }
                                     });
 
