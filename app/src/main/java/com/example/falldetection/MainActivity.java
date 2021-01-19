@@ -49,18 +49,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        itemListView = findViewById(R.id.itemListView);
-        adapter = new MyAdapter(this, mWhoFell, mDate, mTime, images);
-        itemListView.setAdapter(adapter);
-
         try {
             loadFalls();
-            adapter.notifyDataSetChanged();
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
 
+    private void makeAdapter(){
+        itemListView = findViewById(R.id.itemListView);
+        adapter = new MyAdapter(this, mWhoFell, mDate, mTime, images);
+        itemListView.setAdapter(adapter);
+        itemListView.invalidateViews();
     }
 
     @Override
@@ -71,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        itemListView.invalidateViews();
     }
 
     private void loadFalls() throws JSONException {
@@ -106,14 +106,12 @@ public class MainActivity extends AppCompatActivity {
                                 Object date2 = entry.get("date");
                                 Object userid = entry.get("userid");
 
-
                                 mWhoFell.add("grandma");
                                 mDate.add((String) date2);
                                 mTime.add((String) date2);
                                 images.add(R.mipmap.granny);
 
-                                //String all = id.toString() + date2.toString() + userid.toString();
-                                //Toast.makeText(getApplicationContext(), all, Toast.LENGTH_SHORT).show();
+                                makeAdapter();
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -129,8 +127,6 @@ public class MainActivity extends AppCompatActivity {
                 });
 
         MySingleton.getInstance(MainActivity.this).addToRequestque(jsonArrayRequest);
-        adapter.notifyDataSetChanged();
-
     }
 
     class MyAdapter extends ArrayAdapter<String> {
