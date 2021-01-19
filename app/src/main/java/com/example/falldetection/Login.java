@@ -119,9 +119,10 @@ public class Login extends AppCompatActivity {
                                                 }
                                                 else{
                                                     progressBar.setVisibility(View.GONE);
-                                                    Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(getApplicationContext(), "Login failed | wrong username or password", Toast.LENGTH_SHORT).show();
                                                 }
                                             } catch (JSONException e) {
+                                                progressBar.setVisibility(View.GONE);
                                                 e.printStackTrace();
                                             }
                                         }
@@ -129,7 +130,7 @@ public class Login extends AppCompatActivity {
                                         @Override
                                         public void onErrorResponse(VolleyError error) {
                                             progressBar.setVisibility(View.GONE);
-                                            Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getApplicationContext(), "Connection to Server failed", Toast.LENGTH_SHORT).show();
                                         }
                                     });
 
@@ -138,6 +139,7 @@ public class Login extends AppCompatActivity {
                     });
                 }
                 else{
+                    progressBar.setVisibility(View.GONE);
                     Toast.makeText(getApplicationContext(), "All fields are required", Toast.LENGTH_SHORT).show();
                 }
             }

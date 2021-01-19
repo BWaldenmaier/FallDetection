@@ -114,13 +114,15 @@ public class SignUp extends AppCompatActivity {
                                                     Toast.makeText(getApplicationContext(), "Registration failed", Toast.LENGTH_SHORT).show();
                                                 }
                                             } catch (JSONException e) {
+                                                progressBar.setVisibility(View.GONE);
                                                 e.printStackTrace();
                                             }
                                         }
                                     }, new Response.ErrorListener() {
                                         @Override
                                         public void onErrorResponse(VolleyError error) {
-                                            Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
+                                            progressBar.setVisibility(View.GONE);
+                                            Toast.makeText(getApplicationContext(), "Connection to Server failed", Toast.LENGTH_SHORT).show();
                                         }
                                     });
 
@@ -128,6 +130,7 @@ public class SignUp extends AppCompatActivity {
                         }
                     });
                 } else {
+                    progressBar.setVisibility(View.GONE);
                     Toast.makeText(getApplicationContext(), "All fields are required", Toast.LENGTH_SHORT).show();
                 }
             }
