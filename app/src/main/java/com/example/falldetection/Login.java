@@ -3,6 +3,7 @@ package com.example.falldetection;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -59,6 +60,11 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setNavigationBarColor(getResources().getColor(R.color.colorBackground));
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+        }
 
         PushNotifications.start(getApplicationContext(), "b147d8cf-58f4-4190-97bb-65410f817f68");
         PushNotifications.addDeviceInterest("hello");

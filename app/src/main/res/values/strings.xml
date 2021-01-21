@@ -11,4 +11,5 @@
     <string name="register">Not registered yet? Sign up <u>here</u></string>
     <string name="welcome">Welcome to Fall Detection!</string>
     <string name="History">Fall History</string>
+    <string name="ArduinoID">ArduinoID</string>
 </resources>

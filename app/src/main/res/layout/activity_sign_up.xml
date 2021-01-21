@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SignUp">
+    tools:context=".SignUp"
+    android:background="@color/colorBackground"
+    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -115,6 +117,26 @@
                 tools:targetApi="jelly_bean" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayoutArduinoID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:hint="@string/ArduinoID"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutPassword"
+            tools:layout_editor_absoluteX="0dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/arduinoID"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableEnd="@drawable/ic_pass"
+                android:drawableRight="@drawable/ic_pass"
+                android:fontFamily="@font/poppinsmedium"
+                tools:targetApi="jelly_bean" />
+        </com.google.android.material.textfield.TextInputLayout>
+
         <ProgressBar
             android:id="@+id/progress"
             android:layout_width="wrap_content"
@@ -129,11 +151,11 @@
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="40dp"
             android:text="@string/signup"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/progress" />
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutArduinoID" />
 
         <TextView
             android:id="@+id/loginText"
@@ -142,6 +164,7 @@
             android:layout_marginTop="40dp"
             android:fontFamily="@font/poppinsmedium"
             android:text="@string/loginhere2"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/buttonSignUp"

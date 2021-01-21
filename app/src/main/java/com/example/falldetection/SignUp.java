@@ -3,6 +3,7 @@ package com.example.falldetection;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -30,7 +31,7 @@ import java.util.Map;
  */
 public class SignUp extends AppCompatActivity {
 
-    private TextInputEditText textInputEditTextFullname, textInputEditTextUsername, textInputEditTextPassword, textInputEditTextEmail;
+    private TextInputEditText textInputEditTextFullname, textInputEditTextUsername, textInputEditTextPassword, textInputEditTextEmail, textInputEditTextArduinoID;
     private Button buttonSignUp;
     private TextView textViewLogin;
     private ProgressBar progressBar;
@@ -44,10 +45,16 @@ public class SignUp extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setNavigationBarColor(getResources().getColor(R.color.colorBackground));
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+        }
+
         textInputEditTextUsername = findViewById(R.id.username);
         textInputEditTextPassword = findViewById(R.id.password);
         textInputEditTextEmail = findViewById(R.id.email);
         textInputEditTextFullname = findViewById(R.id.fullname);
+        textInputEditTextArduinoID = findViewById(R.id.arduinoID);
         buttonSignUp = findViewById(R.id.buttonSignUp);
         textViewLogin = findViewById(R.id.loginText);
         progressBar = findViewById(R.id.progress);
@@ -67,15 +74,17 @@ public class SignUp extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                final String fullname, username, password, email;
+                final String fullname, username, password, email, arduinoID;
                 fullname = String.valueOf(textInputEditTextFullname.getText());
                 username = String.valueOf(textInputEditTextUsername.getText());
                 password = String.valueOf(textInputEditTextPassword.getText());
                 email = String.valueOf(textInputEditTextEmail.getText());
+                arduinoID = String.valueOf(textInputEditTextArduinoID.getText());
+
 
                 progressBar.setVisibility(View.VISIBLE);
 
-                if (!fullname.equals("") && !username.equals("") && !password.equals("") && !email.equals("")) {
+                if (!fullname.equals("") && !username.equals("") && !password.equals("") && !email.equals("") && !arduinoID.equals("")) {
                     Handler handler = new Handler(Looper.getMainLooper());
                     handler.post(new Runnable() {
                         @Override
@@ -88,6 +97,7 @@ public class SignUp extends AppCompatActivity {
                             params.put("username", username);
                             params.put("password", password);
                             params.put("email", email);
+                            params.put("arduinoID", arduinoID);
 
 
                             JSONObject jsonObj = new JSONObject(params);
