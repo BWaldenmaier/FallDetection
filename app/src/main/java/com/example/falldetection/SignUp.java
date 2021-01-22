@@ -25,6 +25,8 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Activity to register a new User in the database
@@ -35,6 +37,19 @@ public class SignUp extends AppCompatActivity {
     private Button buttonSignUp;
     private TextView textViewLogin;
     private ProgressBar progressBar;
+
+    /**
+     * method is used for checking valid email id format.
+     *
+     * @param email
+     * @return boolean true for valid false for invalid
+     */
+    public static boolean isEmailValid(String email) {
+        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
 
     /**
      * create the Sign Up Instance
@@ -84,64 +99,71 @@ public class SignUp extends AppCompatActivity {
 
                 progressBar.setVisibility(View.VISIBLE);
 
-                if (!fullname.equals("") && !username.equals("") && !password.equals("") && !email.equals("") && !arduinoID.equals("")) {
-                    Handler handler = new Handler(Looper.getMainLooper());
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            String url ="http://lxvongobsthndl.ddns.net:3000/user/registration";
+                if (isEmailValid(email)){
+                    if (!fullname.equals("") && !username.equals("") && !password.equals("") && !email.equals("") && !arduinoID.equals("")) {
+                        Handler handler = new Handler(Looper.getMainLooper());
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                String url ="http://lxvongobsthndl.ddns.net:3000/user/registration";
 
-                            // POST parameters
-                            Map<String, String> params = new HashMap<String, String>();
-                            params.put("fullname", fullname);
-                            params.put("username", username);
-                            params.put("password", password);
-                            params.put("email", email);
-                            params.put("arduinoID", arduinoID);
+                                // POST parameters
+                                Map<String, String> params = new HashMap<String, String>();
+                                params.put("fullname", fullname);
+                                params.put("username", username);
+                                params.put("password", password);
+                                params.put("email", email);
+                                params.put("arduinoID", arduinoID);
 
 
-                            JSONObject jsonObj = new JSONObject(params);
+                                JSONObject jsonObj = new JSONObject(params);
 
-                            final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                                    (Request.Method.POST, url, jsonObj, new Response.Listener<JSONObject>() {
-                                        @Override
-                                        public void onResponse(JSONObject response) {
-                                            try {
-                                                Object success = response.get("success");
-                                                if (success.toString().equals("true")){
+                                final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                                        (Request.Method.POST, url, jsonObj, new Response.Listener<JSONObject>() {
+                                            @Override
+                                            public void onResponse(JSONObject response) {
+                                                try {
+                                                    Object success = response.get("success");
+                                                    if (success.toString().equals("true")){
+                                                        progressBar.setVisibility(View.GONE);
+                                                        Toast.makeText(getApplicationContext(), "Registration was succesfull", Toast.LENGTH_SHORT).show();
+                                                        Intent intent = new Intent(getApplicationContext(), Login.class);
+                                                        startActivity(intent);
+                                                        finish();
+                                                    }
+                                                    else if (success.toString().equals("doubleEntry")){
+                                                        progressBar.setVisibility(View.GONE);
+                                                        Toast.makeText(getApplicationContext(), "This user is already registered! Try another Username", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                    else{
+                                                        progressBar.setVisibility(View.GONE);
+                                                        Toast.makeText(getApplicationContext(), "Registration failed", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                } catch (JSONException e) {
                                                     progressBar.setVisibility(View.GONE);
-                                                    Toast.makeText(getApplicationContext(), "Registration was succesfull", Toast.LENGTH_SHORT).show();
-                                                    Intent intent = new Intent(getApplicationContext(), Login.class);
-                                                    startActivity(intent);
-                                                    finish();
+                                                    e.printStackTrace();
                                                 }
-                                                else if (success.toString().equals("doubleEntry")){
-                                                    progressBar.setVisibility(View.GONE);
-                                                    Toast.makeText(getApplicationContext(), "This user is already registered! Try another Username", Toast.LENGTH_SHORT).show();
-                                                }
-                                                else{
-                                                    progressBar.setVisibility(View.GONE);
-                                                    Toast.makeText(getApplicationContext(), "Registration failed", Toast.LENGTH_SHORT).show();
-                                                }
-                                            } catch (JSONException e) {
-                                                progressBar.setVisibility(View.GONE);
-                                                e.printStackTrace();
                                             }
-                                        }
-                                    }, new Response.ErrorListener() {
-                                        @Override
-                                        public void onErrorResponse(VolleyError error) {
-                                            progressBar.setVisibility(View.GONE);
-                                            Toast.makeText(getApplicationContext(), "Connection to Server failed", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
+                                        }, new Response.ErrorListener() {
+                                            @Override
+                                            public void onErrorResponse(VolleyError error) {
+                                                progressBar.setVisibility(View.GONE);
+                                                Toast.makeText(getApplicationContext(), "Connection to Server failed", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
 
-                            MySingleton.getInstance(SignUp.this).addToRequestque(jsonObjectRequest);
-                        }
-                    });
-                } else {
+                                MySingleton.getInstance(SignUp.this).addToRequestque(jsonObjectRequest);
+                            }
+                        });
+                    } else {
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(getApplicationContext(), "All fields are required", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                else {
                     progressBar.setVisibility(View.GONE);
-                    Toast.makeText(getApplicationContext(), "All fields are required", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Please enter a valid E-Mail", Toast.LENGTH_SHORT).show();
                 }
             }
         });
