@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
                                 String germanDate = dd +"."+ mm +"."+yy;
                                 String time = dateAndTime.substring(11,19);
 
-                                Object userid = entry.get("userid");
+                                //Object userid = entry.get("userid");
 
                                 mWhoFell.add("Grandma");
                                 mDate.add(germanDate);

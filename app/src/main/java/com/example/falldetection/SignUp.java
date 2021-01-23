@@ -17,6 +17,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.android.gms.common.util.NumberUtils;
 import com.google.android.material.textfield.TextInputEditText;
 import com.vishnusivadas.advanced_httpurlconnection.PutData;
 
@@ -39,6 +40,20 @@ public class SignUp extends AppCompatActivity {
     private ProgressBar progressBar;
 
     /**
+     * Method to check if String is a number
+     * @param str
+     * @return
+     */
+    public static boolean isNumeric(String str) {
+        try {
+            Double.parseDouble(str);
+            return true;
+        } catch(NumberFormatException e){
+            return false;
+        }
+    }
+
+    /**
      * method is used for checking valid email id format.
      *
      * @param email
@@ -53,6 +68,7 @@ public class SignUp extends AppCompatActivity {
 
     /**
      * create the Sign Up Instance
+     *
      * @param savedInstanceState
      */
     @Override
@@ -96,16 +112,16 @@ public class SignUp extends AppCompatActivity {
                 email = String.valueOf(textInputEditTextEmail.getText());
                 arduinoID = String.valueOf(textInputEditTextArduinoID.getText());
 
-
                 progressBar.setVisibility(View.VISIBLE);
 
-                if (isEmailValid(email)){
-                    if (!fullname.equals("") && !username.equals("") && !password.equals("") && !email.equals("") && !arduinoID.equals("")) {
+                if (!fullname.equals("") && !username.equals("") && !password.equals("") && !email.equals("") && !arduinoID.equals("")) {
+                    if (isEmailValid(email)) {
+                        if (isNumeric(arduinoID)) {
                         Handler handler = new Handler(Looper.getMainLooper());
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                String url ="http://lxvongobsthndl.ddns.net:3000/user/registration";
+                                String url = "http://lxvongobsthndl.ddns.net:3000/user/registration";
 
                                 // POST parameters
                                 Map<String, String> params = new HashMap<String, String>();
@@ -124,18 +140,16 @@ public class SignUp extends AppCompatActivity {
                                             public void onResponse(JSONObject response) {
                                                 try {
                                                     Object success = response.get("success");
-                                                    if (success.toString().equals("true")){
+                                                    if (success.toString().equals("true")) {
                                                         progressBar.setVisibility(View.GONE);
                                                         Toast.makeText(getApplicationContext(), "Registration was succesfull", Toast.LENGTH_SHORT).show();
                                                         Intent intent = new Intent(getApplicationContext(), Login.class);
                                                         startActivity(intent);
                                                         finish();
-                                                    }
-                                                    else if (success.toString().equals("doubleEntry")){
+                                                    } else if (success.toString().equals("doubleEntry")) {
                                                         progressBar.setVisibility(View.GONE);
                                                         Toast.makeText(getApplicationContext(), "This user is already registered! Try another Username", Toast.LENGTH_SHORT).show();
-                                                    }
-                                                    else{
+                                                    } else {
                                                         progressBar.setVisibility(View.GONE);
                                                         Toast.makeText(getApplicationContext(), "Registration failed", Toast.LENGTH_SHORT).show();
                                                     }
@@ -155,15 +169,18 @@ public class SignUp extends AppCompatActivity {
                                 MySingleton.getInstance(SignUp.this).addToRequestque(jsonObjectRequest);
                             }
                         });
+                        } else {
+                            progressBar.setVisibility(View.GONE);
+                            Toast.makeText(getApplicationContext(), "Please enter a valid ArduinoID", Toast.LENGTH_SHORT).show();
+                        }
                     } else {
                         progressBar.setVisibility(View.GONE);
-                        Toast.makeText(getApplicationContext(), "All fields are required", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Please enter a valid E-Mail", Toast.LENGTH_SHORT).show();
                     }
-                }
-
-                else {
+                } else {
                     progressBar.setVisibility(View.GONE);
-                    Toast.makeText(getApplicationContext(), "Please enter a valid E-Mail", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "All fields are required", Toast.LENGTH_SHORT).show();
+
                 }
             }
         });
