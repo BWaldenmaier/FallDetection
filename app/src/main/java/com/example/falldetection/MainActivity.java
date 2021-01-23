@@ -118,7 +118,14 @@ public class MainActivity extends AppCompatActivity {
                             images.clear();
                         }
 
-                        for (int i = 0; i < response.length(); i++){
+                        int length;
+                        if (response.length() > 14){
+                            length = 14;
+                        }
+                        else {
+                            length = response.length();
+                        }
+                        for (int i = length; i >= 0; i--){  // show only the 15 latest database entrys and show the latest on top
 
                             try {
                                 JSONObject entry = response.getJSONObject(i);
