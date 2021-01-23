@@ -118,18 +118,11 @@ public class MainActivity extends AppCompatActivity {
                             images.clear();
                         }
 
-                        int length;
-                        if (response.length() > 14){
-                            length = 14;
-                        }
-                        else {
-                            length = response.length();
-                        }
-                        for (int i = length; i >= 0; i--){  // show only the 15 latest database entrys and show the latest on top
+                        for (int i = response.length(); i >= 0; i--){  //show latest database entrys on top
 
                             try {
                                 JSONObject entry = response.getJSONObject(i);
-                                Object id = entry.get("id");
+                                //Object id = entry.get("id");
                                 String dateAndTime = (String) entry.get("date");
                                 String date = dateAndTime.substring(0,10);
                                 String yy = date.substring(0,4);
@@ -146,6 +139,10 @@ public class MainActivity extends AppCompatActivity {
                                 images.add(R.mipmap.granny);
 
                                 makeAdapter();
+
+                                if (mWhoFell.size() == 15){ // show only the 15 latest entrys
+                                    break;
+                                }
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
