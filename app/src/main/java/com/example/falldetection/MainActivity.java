@@ -3,10 +3,12 @@ package com.example.falldetection;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +32,7 @@ import java.util.ArrayList;
 /**
  * Activity to show the History of detected Falls
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
     private ListView itemListView;
     private ArrayList<String> mWhoFell = new ArrayList<>();
@@ -39,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Integer> images = new ArrayList<>();
     private MyAdapter adapter;
     private String loggedInUser = null;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     /**
      * creates the Main Activity for the Fall History
@@ -63,6 +66,28 @@ public class MainActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+    }
+
+    /**
+     * Refreshes the Falls when swiped down in th UI
+     */
+    @Override
+    public void onRefresh() {
+        //Toast.makeText(this, "Refresh", Toast.LENGTH_SHORT).show();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(false);
+                try {
+                    loadFalls();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, 1000);
     }
 
     /**
