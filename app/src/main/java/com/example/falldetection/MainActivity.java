@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,12 +21,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.pusher.pushnotifications.PushNotifications;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
-
 
 /**
  * Activity to show the History of detected Falls
@@ -147,7 +144,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
                             try {
                                 JSONObject entry = response.getJSONObject(i);
-                                //Object id = entry.get("id");
                                 String dateAndTime = (String) entry.get("date");
                                 String date = dateAndTime.substring(0,10);
                                 String yy = date.substring(0,4);
@@ -155,8 +151,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                                 String dd = date.substring(8,10);
                                 String germanDate = dd +"."+ mm +"."+yy;
                                 String time = dateAndTime.substring(11,19);
-
-                                //Object userid = entry.get("userid");
 
                                 mWhoFell.add("Grandma");
                                 mDate.add(germanDate);

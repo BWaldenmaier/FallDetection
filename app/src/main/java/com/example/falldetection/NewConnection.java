@@ -1,7 +1,6 @@
 package com.example.falldetection;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 
 public class NewConnection extends AppCompatActivity {
